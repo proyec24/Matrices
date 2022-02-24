@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Excenteme</title>
+        <style>
+            *{
+                padding: 0;
+                margin: 0;
+            }
+            body{
+                width: auto;
+                height: 100%;
+                background: white;
+                background-size: fixed;
+                background-position: 0%;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            .header{
+                height: 70px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin: 0;
+                padding: 0;
+                background-color: rgba(30,33,113,1);
+                position: sticky;
+                box-shadow: 6px 6px 21px 0px rgba(0,0,0,0.75);
+                -webkit-box-shadow: 6px 6px 21px 0px rgba(0,0,0,0.75);
+                -moz-box-shadow: 6px 6px 21px 0px rgba(0,0,0,0.75);
+            }
+            .input{
+                border-radius: 12px 12px 12px 12px;
+                border: 2px solid black;
+                width: 50%;
+                height: 50px;
+                margin-left: 10px;
+                padding: 0;
+                display:flex;
+                justify-content: center;
+                align-content: center;
+            }
+            .cinput{
+                margin: auto;
+                border: none;
+                width: 40%;
+                height: 80%;
+                text-align: center;
+                align-content: center;
+            }
+            .cinput:active{
+                border:none;
+            }
+            .padre{  
+                width: 100%;
+                height: 100%;     
+                margin-top: 5%;
+                display: flex;
+                float: left;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+            }
+            .hijo{
+                float: left;
+                margin: 0;
+                margin-bottom: 10px;
+                width: 24%;
+            }
+            hr{
+                background-color:rgba(30,33,113,1);
+                height: 5px;
+            }
+            .titulo{
+                font-size: 2vw;
+                color: blanchedalmond;
+
+            }
+            .bttn{
+                margin-bottom: 5%;
+                width: 40%;
+                height: 50px;
+                color: white;
+                font-size: 3vw;
+                background-color: #3eb171 ;
+                border-radius: 12px 12px 12px 12px;
+                border: white 2px solid;
+                box-shadow: 6px 6px 21px 0px rgba(0,0,0,0.75);
+                -webkit-box-shadow: 6px 6px 21px 0px rgba(0,0,0,0.75);
+                -moz-box-shadow: 6px 6px 21px 0px rgba(0,0,0,0.75);
+            }
+        </style>
+        <script>
+            function calcular(){
+                let matrizin;
+                let inversor=-1;
+                let mcd1,mcd2,mcDefinitivo;
+                matrizin=new Array();
+                matrizin[0] = new Array();
+                matrizin[1] = new Array();
+                matrizin[2] = new Array();
+                matrizaux=new Array();
+                matrizaux[0]=new Array();
+                matrizaux[1]=new Array();
+                matrizaux2=new Array();
+                let i,j,multiplo1,multiplo2;
+                let x=1;
+                for(i=0;i<3;i++){
+                    for(j=0;j<4;j++){
+                        matrizin[i][j]=document.getElementById(x).value;
+                        x++;
+                    }
+                }
+                for(i=0;i<2;i++){
+                    for(j=0;j<4;j++){
+                        matrizaux[i][j]=matrizin[i][j];
+                    }
+                }
+                multiplo1=matrizaux[0][0];
+                multiplo2=inversor*matrizaux[1][0];
+                console.log(multiplo2)
+                for(i=0;i<4;i++){
+                    matrizaux[0][i]=matrizaux[0][i]*multiplo2;
+                    matrizaux[1][i]=matrizaux[1][i]*multiplo1;
+                }
+                generarMatrizPro(matrizaux,2);
+                for(i=0;i<4;i++){
+                   matrizaux2[i]=matrizaux[1][i]+matrizaux[0][i];
+                }
+                mcd1=maximoComunDivisor(matrizaux2[0],matrizaux2[1]);
+                mcd2=maximoComunDivisor(matrizaux2[2],matrizaux2[3]);
+                mcDefinitivo=maximoComunDivisor(mcd1,mcd2);
+                generarMatrizPro(matrizaux2,1);
+                for(i=0;i<4;i++){
+                    matrizin[1][i]=matrizaux2[i]/mcDefinitivo;
+                }
+                generarMatrizPro(matrizin,3);
+                for(i=0;i<3;i++){
+                    for(j=0;j<4;j++){
+                        i==1?matrizaux[i][j]=matrizin[i+1][j]:matrizaux[i][j]=matrizin[i][j];
+                    }
+                }
+                multiplo1=matrizaux[0][0];
+                multiplo2=inversor*matrizaux[1][0];
+                console.log(multiplo2)
+                for(i=0;i<4;i++){
+                    matrizaux[0][i]=matrizaux[0][i]*multiplo2;
+                    matrizaux[1][i]=matrizaux[1][i]*multiplo1;
+                }
+                generarMatrizPro(matrizaux,2);
+                for(i=0;i<4;i++){
+                   matrizaux2[i]=matrizaux[1][i]+matrizaux[0][i];
+                }
+                mcd1=maximoComunDivisor(matrizaux2[0],matrizaux2[1]);
+                mcd2=maximoComunDivisor(matrizaux2[2],matrizaux2[3]);
+                mcDefinitivo=maximoComunDivisor(mcd1,mcd2);
+                for(i=0;i<4;i++){
+                   matrizin[2][i]=matrizaux2[i]/mcDefinitivo;
+                }
+                generarMatrizPro(matrizaux2,1);
+                generarMatrizPro(matrizin,3);
+                for(i=1;i<3;i++){
+                    for(j=0;j<4;j++){
+                        matrizaux[i-1][j]=matrizin[i][j];
+                    }
+                }
+                multiplo1=matrizaux[0][1];
+                multiplo2=inversor*matrizaux[1][1];
+                console.log(multiplo2)
+                for(i=0;i<4;i++){
+                    matrizaux[0][i]=matrizaux[0][i]*multiplo2;
+                    matrizaux[1][i]=matrizaux[1][i]*multiplo1;
+                }
+                generarMatrizPro(matrizaux,2);
+                for(i=0;i<4;i++){
+                   matrizaux2[i]=matrizaux[1][i]+matrizaux[0][i];
+                }
+                mcd1=maximoComunDivisor(matrizaux2[0],matrizaux2[1]);
+                mcd2=maximoComunDivisor(matrizaux2[2],matrizaux2[3]);
+                mcDefinitivo=maximoComunDivisor(mcd1,mcd2);
+                generarMatrizPro(matrizaux2,1);
+                for(i=0;i<4;i++){
+                    matrizin[2][i]=matrizaux2[i]/mcDefinitivo;
+                }
+                generarMatrizPro(matrizin,3);
+                for(i=1;i<3;i++){
+                    for(j=0;j<4;j++){
+                        matrizaux[i-1][j]=matrizin[i][j];
+                    }
+                }
+                multiplo1=matrizaux[0][2];
+                multiplo2=inversor*matrizaux[1][2];
+                console.log(multiplo2)
+                for(i=0;i<4;i++){
+                    matrizaux[0][i]=matrizaux[0][i]*multiplo2;
+                    matrizaux[1][i]=matrizaux[1][i]*multiplo1;
+                }
+                generarMatrizPro(matrizaux,2);
+                for(i=0;i<4;i++){
+                   matrizaux2[i]=matrizaux[1][i]+matrizaux[0][i];
+                }
+                mcd1=maximoComunDivisor(matrizaux2[0],matrizaux2[1]);
+                mcd2=maximoComunDivisor(matrizaux2[2],matrizaux2[3]);
+                mcDefinitivo=maximoComunDivisor(mcd1,mcd2);
+                generarMatrizPro(matrizaux2,1);
+                for(i=0;i<4;i++){
+                    matrizin[1][i]=matrizaux2[i]/mcDefinitivo;
+                }
+                generarMatrizPro(matrizin,3);
+                for(i=0;i<3;i++){
+                    for(j=0;j<4;j++){
+                        i==1?matrizaux[i][j]=matrizin[i+1][j]:matrizaux[i][j]=matrizin[i][j];
+                    }
+                }
+                multiplo1=matrizaux[0][2];
+                multiplo2=inversor*matrizaux[1][2];
+                console.log(multiplo2)
+                for(i=0;i<4;i++){
+                    matrizaux[0][i]=matrizaux[0][i]*multiplo2;
+                    matrizaux[1][i]=matrizaux[1][i]*multiplo1;
+                }
+                generarMatrizPro(matrizaux,2);
+                for(i=0;i<4;i++){
+                   matrizaux2[i]=matrizaux[1][i]+matrizaux[0][i];
+                }
+                mcd1=maximoComunDivisor(matrizaux2[0],matrizaux2[1]);
+                mcd2=maximoComunDivisor(matrizaux2[2],matrizaux2[3]);
+                mcDefinitivo=maximoComunDivisor(mcd1,mcd2);
+                generarMatrizPro(matrizaux2,1);
+                for(i=0;i<4;i++){
+                    matrizin[0][i]=matrizaux2[i]/mcDefinitivo;
+                }
+                generarMatrizPro(matrizin,3);
+            }
+            function maximoComunDivisor(a, b){
+                let temporal; //Para no perder b
+                while (b !== 0) {
+                    temporal = b;
+                    b = a % b;
+                    a = temporal;
+                }
+                return a;
+            }
+            function generarMatrizPro(matrizaux,x){
+                let pros=document.getElementById("prox");
+                let clase=["padre","hijo","input","cinput"];
+                let attribute;
+                for(i=0;i<x;i++){
+                    let padre = document.createElement("div");
+                    padre.setAttribute("class",clase[0]);
+                    for(j=0;j<4;j++){
+                        let hijo = document.createElement("div");
+                        hijo.setAttribute("class",clase[1]);
+                        let input = document.createElement("div");
+                        input.setAttribute("class",clase[2]);
+                        let cinput = document.createElement("p");
+                        let content;
+                        x==1?content=document.createTextNode(matrizaux[j]):content=document.createTextNode(matrizaux[i][j]);
+                        cinput.appendChild(content);
+                        cinput.setAttribute("class",clase[3]);
+                        input.appendChild(cinput);
+                        hijo.appendChild(input);
+                        padre.appendChild(hijo);
+                        pros.appendChild(padre);
+                    }
+                }
+                let hr = document.createElement("hr");
+                pros.appendChild(hr);
+            }
+            function llenar(){
+                document.getElementById("1").value=1;
+                document.getElementById("2").value=4;
+                document.getElementById("3").value=3;
+                document.getElementById("4").value=5;
+                document.getElementById("5").value=4;
+                document.getElementById("6").value=-3;
+                document.getElementById("7").value=-1;
+                document.getElementById("8").value=4;
+                document.getElementById("9").value=5;
+                document.getElementById("10").value=2;
+                document.getElementById("11").value=3;
+                document.getElementById("12").value=4;
+            }
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <p class="titulo">Matrices :D</p>
+        </div>
+        <div class="padre">
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="1">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="2">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="3">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="4">
+                </div>
+            </div>
+        </div>
+        <div class="padre">
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="5">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="6">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="7">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="8">
+                </div>
+            </div>
+        </div>
+        <div class="padre">
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="9">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="10">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="11">
+                </div>
+            </div>
+            <div class="hijo">
+                <div class="input">
+                    <input type="number" class="cinput" value="0" name="" id="12">
+                </div>
+            </div>
+        </div>
+        
+        <div class="padre">
+            <input type="button" onclick="llenar();" value="LLENAR" class="bttn">
+        </div>
+        <div class="padre">
+            <input type="button" onclick="calcular();" value="CALCULAR" class="bttn">
+        </div>
+        <hr>
+        <div id="prox">
+
+        </div>
+    </body>
+</html>
